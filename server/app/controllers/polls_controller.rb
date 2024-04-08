@@ -1,7 +1,7 @@
 class PollsController < ApplicationController
 
   def index
-    render json: Poll.all.includes(:poll_options)
+    render json: Poll.all.includes(:options)
   end
 
   def create
@@ -10,7 +10,7 @@ class PollsController < ApplicationController
   end
 
   def show
-    record = Poll.includes(:poll_options).find(params[:id])
+    record = Poll.includes(:options).find(params[:id])
     render json: record
   end
 
