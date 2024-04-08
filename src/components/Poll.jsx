@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { withRouter } from '../common/with-router.jsx';
 import PollDataService from "../services/poll.service.jsx";
+import { Link } from 'react-router-dom';
 
 const Poll = (props) => {
 
@@ -107,17 +108,11 @@ const Poll = (props) => {
       </div>
     ) : (
       <div>
-        <h4>Poll</h4>
+        <Link to={"/polls"}>Back to Polls</Link>
         <div>
-          <label>
-            <strong>Title:</strong>
-          </label>
-          {props.title}
+          <h2>{props.title}</h2>
         </div>
         <div>
-          <label>
-            <strong>Description:</strong>
-          </label>{" "}
           {props.description}
         </div>
       </div>
