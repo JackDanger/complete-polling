@@ -5,8 +5,8 @@ require Rails.root.join('app/models/poll')
 RSpec.describe Poll do
   context "validating" do
 
-    let(:poll) { Poll.new }
-    subject { poll.valid? }
+    let(:poll) { Poll.new(title: "This is a poll") }
+    subject { poll }
 
     context "without any options" do
       before do
@@ -14,7 +14,7 @@ RSpec.describe Poll do
       end
 
       it "is invalid" do
-        expect
+        expect(subject).to_not be_valid
       end
     end
     context "with four options" do
@@ -22,8 +22,8 @@ RSpec.describe Poll do
         4.times {|n| poll.poll_options.build text: "option #{n}", index: n }
       end
 
-      it "persists" do
-        expect(:subject).to be_truthy
+      it "works okay" do
+        expect(subject).to be_valid
       end
     end
   end

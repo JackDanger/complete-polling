@@ -5,6 +5,8 @@ class Poll < ApplicationRecord
   validate :must_have_four_poll_options
 
   def must_have_four_poll_options
-    poll_options.size == 4
+    unless poll_options.size == 4
+      errors.add "Must have 4 poll options for now. Let's keep this app simple."
+    end
   end
 end

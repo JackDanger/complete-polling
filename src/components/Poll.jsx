@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { withRouter } from '../common/with-router.jsx';
 import PollDataService from "../services/poll.service.jsx";
 import { Link } from 'react-router-dom';
+import Option from "./Option";
 
 const Poll = (props) => {
 
@@ -24,11 +25,16 @@ const Poll = (props) => {
       description: description,
     });
   };
+  function onChangeOption(index) {
+    return (optionData) => {
+      state.options[index] = optionData;
+    }
+  }
 
   function getPoll(id) {
     PollDataService.get(id)
       .then(response => {
-        setState({...response.data})
+        setState({ ...response.data })
         console.log(response.data);
       })
       .catch(e => {
@@ -90,6 +96,11 @@ const Poll = (props) => {
               onChange={onChangeDescription}
             />
           </div>
+          <div>
+            {(props.options).map((option, index) => (
+              <Option index={index} edit={true} onChange={onChangeOption(index)} text={option.text} />
+            ))}
+          </div>
         </form>
         <button
           className="badge badge-danger mr-2"
@@ -115,6 +126,9 @@ const Poll = (props) => {
         <div>
           {props.description}
         </div>
+        {(props.options).map((props, index) => (
+          <Option pollId={props.id} {...props.options} />
+        ))}
       </div>
     )
   );
