@@ -5,7 +5,7 @@ class PollsController < ApplicationController
   end
 
   def create
-    record = Poll.create! params[:poll].permit(:title, :description)
+    record = Poll.create! params[:poll].permit(:title, :description, :options)
     render json: record
   end
 
@@ -16,7 +16,7 @@ class PollsController < ApplicationController
 
   def update
     record = Poll.find(params[:id])
-    record.update!(params[:poll].permit(:title, :description))
+    record.update!(params[:poll].permit(:title, :description, :options))
     render json: record
   end
 
