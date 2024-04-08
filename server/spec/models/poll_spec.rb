@@ -10,7 +10,7 @@ RSpec.describe Poll do
 
     context "without any options" do
       before do
-        poll.poll_options.clear
+        poll.options.clear
       end
 
       it "is invalid" do
@@ -19,7 +19,7 @@ RSpec.describe Poll do
     end
     context "with four options" do
       before do
-        4.times {|n| poll.poll_options.build text: "option #{n}", index: n }
+        4.times {|n| poll.options.build text: "option #{n}", index: n }
       end
 
       it "works okay" do
