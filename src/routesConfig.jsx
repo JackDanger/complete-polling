@@ -1,7 +1,7 @@
 import React from 'react';
 import App from './App';
-import AddPoll from './components/AddPoll';
 import Poll from './components/Poll.jsx';
+import NewPoll from './components/NewPoll.jsx';
 import PollsList from './components/PollsList';
 
 export const routesConfig = [
@@ -11,8 +11,8 @@ export const routesConfig = [
     children: [
       { path: "/", element: <PollsList /> },
       { path: "/polls", element: <PollsList /> },
-      { path: "/add", element: <AddPoll /> },
       { path: "/polls/:id", element: <Poll /> },
+      { path: "/polls/new", element: <NewPoll /> },
     ]
   },
   {
