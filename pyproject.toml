@@ -1,0 +1,17 @@
+[project]
+name = "polls4days"
+authors = [
+  { name = "Jack Danger", email = "email@jackdanger.com" }
+]
+version = "0.0.1"
+dependencies = [
+    "requests",
+    "flask",
+    "flask-cors",
+    "sqlalchemy",
+    "IPython",
+    "sqlite3",
+]
+
+[project.scripts]
+
