@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PollDataService from "../services/poll.service";
 import { Link } from "react-router-dom";
-import Poll from "./Poll";
+import Poll from "./PollForm";
 
 
 const PollList = () => {
