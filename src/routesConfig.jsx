@@ -1,6 +1,6 @@
 import React from 'react';
 import App from './App';
-import Poll from './components/Poll.jsx';
+import Poll from './components/Poll1.jsx';
 import NewPoll from './components/NewPoll.jsx';
 import PollsList from './components/PollsList';
 
