@@ -32,7 +32,7 @@ RSpec.describe "Votes", type: :request do
 
   describe "POST /create" do
     subject do
-      post "/polls/#{poll.id}/vote", params: { poll_id: poll.id, option_id: options.first.id }
+      post "/polls/#{poll.id}/vote", params: { option_id: options.first.id }
     end
 
     context "when no vote exists" do

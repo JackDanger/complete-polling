@@ -2,7 +2,7 @@ import http from "../http-common";
 
 const Host = "http://localhost:1337";
 
-class PollDataService {
+class Poll {
   getAll() {
     return http.get(`${Host}/polls`);
   }
@@ -22,10 +22,15 @@ class PollDataService {
   delete(id) {
     return http.delete(`${Host}/polls/${id}`);
   }
-
-  deleteAll() {
-    return http.delete(`${Host}/polls`);
+}
+class Vote {
+  create(data) {
+    return http.post(`${Host}/polls/${data.pollId}/vote`, {option_id: data.optionId});
+  }
+  get(pollId) {
+    return http.get(`${Host}/polls/${pollId}/vote`);
   }
 }
 
-export default new PollDataService();
+export const PollAPI = new Poll();
+export const VoteAPI = new Vote();

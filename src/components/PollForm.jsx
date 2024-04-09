@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react';
-import PollDataService from "../services/poll.service.jsx";
-import Option from "./Option.jsx";
+import { useEffect, useState } from 'react';
 import { withRouter } from '../common/with-router.jsx';
+import { PollAPI } from "../services/poll.service.jsx";
 
 function PollForm(props) {
 
   const [selectedPollId, setSelectedPollId] = useState();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [options, setOptions] = useState(['', '', '', '']);
+  const [options, setOptions] = useState([{ text: '', text: '', text: '', text: '' }]);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (selectedPollId) {
-      PollDataService.get(selectedPollId).then((response) => {
+      PollAPI.get(selectedPollId).then((response) => {
         const { title, description } = response.data;
         setTitle(title);
         setDescription(description);
@@ -37,9 +36,9 @@ function PollForm(props) {
   const handleTitleChange = (event) => setTitle(event.target.value);
   const handleDescriptionChange = (event) => setDescription(event.target.value);
 
-  const handleOptionChange = (index, event) => {
+  const handleOptionChange = (index, id, event) => {
     const newOptions = [...options];
-    newOptions[index] = { text: event.target.value };
+    newOptions[index] = { id: id, index: index, text: event.target.value };
     setOptions(newOptions);
   };
 
@@ -50,10 +49,10 @@ function PollForm(props) {
 
     try {
       if (isEditing) {
-        await PollDataService.update(selectedPollId, pollData);
+        await PollAPI.update(selectedPollId, pollData);
         props.router.navigate(`/polls/${selectedPollId}`);
       } else {
-        const created = await PollDataService.create(pollData);
+        const created = await PollAPI.create(pollData);
         console.log(created);
         props.router.navigate(`/polls/${created.data.id}`);
       }
@@ -65,7 +64,7 @@ function PollForm(props) {
   const handleDeletePoll = async () => {
     if (window.confirm('Are you sure you want to delete this poll?')) {
       try {
-        await PollDataService.delete(selectedPollId);
+        await PollAPI.delete(selectedPollId);
         props.router.navigate('/polls');
         console.log('Poll deleted successfully!');
       } catch (error) {
@@ -76,40 +75,64 @@ function PollForm(props) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <div className="space-y-12">
+        <div className="border-b border-gray-900/10 pb-12">
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="col-span-full">
+              <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
+                  Question
+                </h2>
+              </label>
+              <div className="mt-2 mb-4">
+                <input
+                  className="text-lg px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded border-0 shadow focus:outline-none focus:ring w-full"
+                  id="title"
+                  type="text"
+                  value={title}
+                  onChange={handleTitleChange}
+                  required
+                />
+              </div>
+              <p className="text-sm">This poll <a href="https://complete-labs.notion.site/Fullstack-a5fa78b61da44ac89da994fea2b2cbe0#:~:text=have%C2%A0a%C2%A0title%2C-,description,-%2C%C2%A0and%C2%A0a%C2%A0set">requires a description</a></p>
+              <div className="mt-2 mb-4">
+                <input
+                  className="px-3 py-3 text-sm placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded border-0 shadow focus:outline-none focus:ring w-full"
+                  id="description"
+                  type="text"
+                  value={description}
+                  onChange={handleDescriptionChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="col-span-full">
+              <h2 className="text-base my-4 font-semibold leading-7 text-gray-900">Options</h2>
 
-      <div>
-        <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          value={title}
-          onChange={handleTitleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={handleDescriptionChange}
-          required
-        />
-      </div>
 
-      <div className='grid grid-flow-row auto-rows-auto gap-10'>
-        {options.map((option, index) => (
-          <div key={index}>
-            <Option edit={true} index={index} text={option.text} onChange={(event) => handleOptionChange(index, event)} />
+              <div className='grid grid-flow-row auto-rows-auto gap-10'>
+                {options.map((option, index) => (
+                  <div key={index} className="mt-2 mb-4">
+                    <input
+                      className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded border-0 shadow focus:outline-none focus:ring w-full"
+                      type="text"
+                      id={`option_${index}`}
+                      value={option.text}
+                      onChange={(event) => handleOptionChange(index, option.id, event)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className='flex mt-5 space-x-1'>
-        <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">{isEditing ? 'Update Poll' : 'Create Poll'}</button>
-        {isEditing && (
-          <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onClick={handleDeletePoll}>Delete Poll</button>
-        )}
+        <div className='flex mt-5 space-x-1'>
+          <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">{isEditing ? 'Update Poll' : 'Create Poll'}</button>
+          {isEditing && (
+            <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onClick={handleDeletePoll}>Delete Poll</button>
+          )}
+        </div>
       </div>
     </form>
   );
