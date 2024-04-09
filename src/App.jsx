@@ -46,7 +46,7 @@ const App = () => {
               </div>
             </div>
           </div>
-          <div className="sm:w-9/12 lg:w-8/12 px-4 sm:pr-10 lg:pr-4">
+          <div className="sm:w-9/12 w-5/12 px-4 pr-10 lg:pr-4">
             <div className="my-8">
               <Outlet />
             </div>
