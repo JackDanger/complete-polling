@@ -27,7 +27,7 @@ const App = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to={"/add"} className="inline-block py-2 px-4 no-underline">
+                    <Link to={"/polls/new"} className="inline-block py-2 px-4 no-underline">
                       Create your Own
                     </Link>
                   </li>
@@ -38,8 +38,8 @@ const App = () => {
                 </div>
                 <ul className="block flex-wrap list-none pl-0 mb-0 mt-0">
                   <li>
-                    <Link to={"/statistics"} className="inline-block py-2 px-4 no-underline">
-                      Lookit
+                    <Link to={"/not-implemented-i-just-wanted-more-in-the-sidebar-nav"} className="inline-block py-2 px-4 no-underline">
+                      View Trends
                     </Link>
                   </li>
                 </ul>

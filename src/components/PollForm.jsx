@@ -21,7 +21,7 @@ function PollForm(props) {
         let options = response.data.options_attributes;
         // Ensure there's at least 4 options
         for (let i = options.length; i < 4; i++) {
-          options[i] = {text: ""};
+          options[i] = { text: "" };
         };
         setOptions(options);
 
@@ -51,11 +51,12 @@ function PollForm(props) {
     try {
       if (isEditing) {
         await PollDataService.update(selectedPollId, pollData);
+        props.router.navigate(`/polls/${selectedPollId}`);
       } else {
-        await PollDataService.create(pollData);
+        const created = await PollDataService.create(pollData);
+        console.log(created);
+        props.router.navigate(`/polls/${created.data.id}`);
       }
-      // Reset form
-      resetForm();
     } catch (error) {
       console.error('There was an error saving the poll:', error);
     }
@@ -67,18 +68,10 @@ function PollForm(props) {
         await PollDataService.delete(selectedPollId);
         props.router.navigate('/polls');
         console.log('Poll deleted successfully!');
-        resetForm();
       } catch (error) {
         console.error('Failed to delete the poll:', error);
       }
     }
-  };
-
-  const resetForm = () => {
-    setTitle('');
-    setDescription('');
-    setOptions([{ text: '' }, { text: '' }, { text: '' }, { text: '' }]);
-    setIsEditing(false);
   };
 
   return (
@@ -104,16 +97,20 @@ function PollForm(props) {
         />
       </div>
 
-      <div>
+      <div className='grid grid-flow-row auto-rows-auto gap-10'>
         {options.map((option, index) => (
-          <Option edit={true} key={index} index={index} text={option.text} onChange={(event) => handleOptionChange(index, event)} />
+          <div key={index}>
+            <Option edit={true} index={index} text={option.text} onChange={(event) => handleOptionChange(index, event)} />
+          </div>
         ))}
       </div>
 
-      <button type="submit">{isEditing ? 'Update Poll' : 'Create Poll'}</button>
-      {isEditing && (
-        <button type="button" onClick={handleDeletePoll}>Delete Poll</button>
-      )}
+      <div className='flex mt-5 space-x-1'>
+        <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">{isEditing ? 'Update Poll' : 'Create Poll'}</button>
+        {isEditing && (
+          <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onClick={handleDeletePoll}>Delete Poll</button>
+        )}
+      </div>
     </form>
   );
 }
