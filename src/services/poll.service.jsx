@@ -24,11 +24,14 @@ class Poll {
   }
 }
 class Vote {
-  create(data) {
-    return http.post(`${Host}/polls/${data.pollId}/vote`, {option_id: data.optionId});
+  getAll() {
+    return http.get(`${Host}/votes/`);
   }
   get(pollId) {
     return http.get(`${Host}/polls/${pollId}/vote`);
+  }
+  create(data) {
+    return http.post(`${Host}/polls/${data.pollId}/vote`, {option_id: data.optionId});
   }
 }
 

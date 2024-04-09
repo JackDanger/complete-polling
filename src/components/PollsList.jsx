@@ -20,20 +20,16 @@ const PollList = () => {
       });
   }, []);
 
-  useEffect(() => {
-    if (polls.length > 0) {
-      polls.forEach((poll) => {
-        VoteAPI.get(poll.props.id)
-          .then(response => {
-            let _votes = { ...votes };
-            _votes[poll.props.id] = response.data.vote.option_id;
-            setVotes(_votes);
-          })
-          .catch(e => {
-            console.log(e);
-          });
+  useEffect((polls) => {
+    VoteAPI.getAll()
+      .then(response => {
+        console.log(response.data)
+        setVotes(response.data.reduce((acc, item) => { acc[item.poll_id] = item.option_id; return acc }, {}));
+        console.log(votes)
+      })
+      .catch(e => {
+        console.log(e);
       });
-    }
   }, [polls]);
 
 
@@ -46,8 +42,8 @@ const PollList = () => {
         <div className="mt-10 relative">
           <ul className="col-span-full">
             {polls.map(poll => (
-              <Link key={poll.props.id} to={`/polls/${poll.props.id}`}>
-                <li className="hover:list-disc rounded-sm border-solid py-1 outline-slate-100 text-lg" >
+              <Link key={poll.props.id} vote={votes[poll.props.id]} to={`/polls/${poll.props.id}`}>
+                <li className={`hover:list-disc rounded-sm border-solid py-1 outline-slate-100 text-lg ${votes[poll.props.id] && 'text-slate-300'}`} >
                   &raquo; {poll.props.title}
                 </li>
               </Link>
