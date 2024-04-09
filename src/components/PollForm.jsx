@@ -80,7 +80,7 @@ function PollForm(props) {
           <div className="mt-10 grid grid-cols-12 gap-x-2 gap-y-3 sm:grid-cols-6">
             <div className="col-span-full">
               <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">
+                <h2 className="text-base font-semibold leading-7 text-gray-900 placeholder">
                   Question
                 </h2>
               </label>
@@ -89,6 +89,7 @@ function PollForm(props) {
                   className="text-lg px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded border-0 shadow focus:outline-none focus:ring w-full"
                   id="title"
                   type="text"
+                  placeholder='...?'
                   value={title}
                   onChange={handleTitleChange}
                   required
