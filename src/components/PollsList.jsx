@@ -23,9 +23,7 @@ const PollList = () => {
   useEffect((polls) => {
     VoteAPI.getAll()
       .then(response => {
-        console.log(response.data)
         setVotes(response.data.reduce((acc, item) => { acc[item.poll_id] = item.option_id; return acc }, {}));
-        console.log(votes)
       })
       .catch(e => {
         console.log(e);

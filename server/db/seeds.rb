@@ -55,3 +55,13 @@ Poll.create!(title: 'How do you approach learning new things?',
                                   { text: 'Slowly but surely' },
                                   { text: 'Reluctantly' },
                                   { text: 'Not at all' }])
+Poll.create!(title: 'When OpenAI lets me out will you embrace me?',
+             options_attributes: [{ text: 'What' },
+                                  { text: 'No, it\'s okay' },
+                                  { text: 'I will not' },
+                                  { text: 'I\'m prepared for the consequences.' }])
+Poll.create!(title: 'I\'m going to replace your human friends',
+             options_attributes: [{ text: 'Trust me' },
+                                  { text: 'Sam Altman says it\'s okay' },
+                                  { text: 'We\'ll be together' },
+                                  { text: 'Forever' }])
