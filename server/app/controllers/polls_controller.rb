@@ -6,7 +6,6 @@ class PollsController < ApplicationController
   end
 
   def create
-    require 'pry'
     record = Poll.create! params[:poll].permit(:title, :description, options_attributes: [:id, :text, :index])
     render json: record
   end
