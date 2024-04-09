@@ -1,65 +1,63 @@
 import { useState, useEffect } from 'react';
-import { withRouter } from '../common/with-router.jsx';
 import PollDataService from "../services/poll.service.jsx";
-import { Link } from 'react-router-dom';
-import Option from "./Option";
+import Option from "./Option.jsx";
+import { withRouter } from '../common/with-router.jsx';
 
-function PollForm({ selectedPollId, onPollUpdated }) {
-    const [state, setState] = useState()
+function PollForm(props) {
+
+  const [selectedPollId, setSelectedPollId] = useState();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [options, setOptions] = useState(['']);
+  const [options, setOptions] = useState(['', '', '', '']);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (selectedPollId) {
       PollDataService.get(selectedPollId).then((response) => {
-        const { title, description, options } = response.data;
+        const { title, description } = response.data;
         setTitle(title);
         setDescription(description);
-        setOptions(options.map(option => option.text));
+
+        let options = response.data.options_attributes;
+        // Ensure there's at least 4 options
+        for (let i = options.length; i < 4; i++) {
+          options[i] = {text: ""};
+        };
+        setOptions(options);
+
         setIsEditing(true);
       });
     }
   }, [selectedPollId]);
 
+  if (!selectedPollId && props.router.params.id) {
+    setSelectedPollId(props.router.params.id);
+  }
+
   const handleTitleChange = (event) => setTitle(event.target.value);
   const handleDescriptionChange = (event) => setDescription(event.target.value);
-  
+
   const handleOptionChange = (index, event) => {
     const newOptions = [...options];
-    newOptions[index] = event.target.value;
-    setOptions(newOptions);
-  };
-
-  const handleAddOption = () => {
-    setOptions([...options, '']); 
-  };
-
-  const handleRemoveOption = (index) => {
-    const newOptions = options.filter((_, i) => i !== index);
+    newOptions[index] = { text: event.target.value };
     setOptions(newOptions);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const pollData = { title, description, options };
+    const pollData = { title, description, options_attributes: options };
 
     try {
       if (isEditing) {
         await PollDataService.update(selectedPollId, pollData);
-        alert('Poll updated successfully!');
-        onPollUpdated(); 
       } else {
         await PollDataService.create(pollData);
-        alert('Poll created successfully!');
       }
       // Reset form
       resetForm();
     } catch (error) {
       console.error('There was an error saving the poll:', error);
-      alert('Failed to save the poll.');
     }
   };
 
@@ -67,12 +65,11 @@ function PollForm({ selectedPollId, onPollUpdated }) {
     if (window.confirm('Are you sure you want to delete this poll?')) {
       try {
         await PollDataService.delete(selectedPollId);
-        alert('Poll deleted successfully!');
+        props.router.navigate('/polls');
+        console.log('Poll deleted successfully!');
         resetForm();
-        onPollUpdated(); // Callback to inform parent component about the deletion
       } catch (error) {
         console.error('Failed to delete the poll:', error);
-        alert('Failed to delete the poll.');
       }
     }
   };
@@ -80,13 +77,13 @@ function PollForm({ selectedPollId, onPollUpdated }) {
   const resetForm = () => {
     setTitle('');
     setDescription('');
-    setOptions(['']);
+    setOptions([{ text: '' }, { text: '' }, { text: '' }, { text: '' }]);
     setIsEditing(false);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-        
+
       <div>
         <label htmlFor="title">Title</label>
         <input
@@ -108,21 +105,9 @@ function PollForm({ selectedPollId, onPollUpdated }) {
       </div>
 
       <div>
-        <label>Options</label>
         {options.map((option, index) => (
-          <div key={index}>
-            <input
-              type="text"
-              value={option}
-              onChange={(event) => handleOptionChange(index, event)}
-              required
-            />
-            {options.length > 1 && (
-              <button type="button" onClick={() => handleRemoveOption(index)}>Remove</button>
-            )}
-          </div>
+          <Option edit={true} key={index} index={index} text={option.text} onChange={(event) => handleOptionChange(index, event)} />
         ))}
-        <button type="button" onClick={handleAddOption}>Add Option</button>
       </div>
 
       <button type="submit">{isEditing ? 'Update Poll' : 'Create Poll'}</button>
@@ -133,4 +118,4 @@ function PollForm({ selectedPollId, onPollUpdated }) {
   );
 }
 
-export default PollForm;
+export default withRouter(PollForm);
