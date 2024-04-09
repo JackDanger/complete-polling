@@ -37,15 +37,15 @@ const Poll = (props) => {
   return (
     pollId && (
       <div className="space-y-12" >
-        <Link to={"/polls"}>&laquo; Back to Polls</Link>
+        <Link to={"/polls"} className="inline-block text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight ">&laquo; Back to Polls</Link>
         <div className="border-b border-gray-900/10 pb-12">
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="col-span-full">
               <div className="text-lg">
-              {title}
-              </div>
-              <div className='text-sm'>
-                <Link to={`/polls/${pollId}/edit`}>Edit poll</Link>
+                {title}
+                <span className='ml-2 text-sm'>
+                  [<Link to={`/polls/${pollId}/edit`}>edit poll</Link>]
+                </span>
               </div>
               <div className="mt-2 mb-4">
                 {description}
