@@ -12,8 +12,8 @@ const App = () => {
         </div>
       </nav>
       <div className="container mx-auto mt-4 pt-12">
-        <div className="flex flex-wrap">
-          <div className="w-full sm:w-3/12 lg:w-2/12 pr-4 tex-left">
+        <div className="flex grid-cols-2 flex-wrap">
+          <div className="sm:w-4/12 w-1/5 lg:w-2/12 pr-4 text-left">
             <div className="block overflow-y-auto pt-8 pb-4">
               <div className="mb-6">
 
@@ -33,7 +33,7 @@ const App = () => {
                   </li>
                 </ul>
 
-                <div className="text-blueGray-700 hover:text-blueGray-800 text-xs uppercase font-bold block py-1 px-4 no-underline">
+                <div className="text-blueGray-700 hover:text-blueGray-800 text-xs uppercase font-bold block py-3 px-4 no-underline">
                   Statistics
                 </div>
                 <ul className="block flex-wrap list-none pl-0 mb-0 mt-0">
@@ -46,12 +46,11 @@ const App = () => {
               </div>
             </div>
           </div>
-          <div className="w-full sm:w-9/12 lg:w-8/12 px-4 sm:pr-10 lg:pr-4">
+          <div className="sm:w-9/12 lg:w-8/12 px-4 sm:pr-10 lg:pr-4">
             <div className="my-8">
               <Outlet />
             </div>
           </div>
-          <div className="w-full lg:w-2/12 px-4 hidden lg:block"></div>
         </div>
       </div>
     </div>

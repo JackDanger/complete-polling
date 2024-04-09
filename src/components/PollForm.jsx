@@ -7,7 +7,7 @@ function PollForm(props) {
   const [selectedPollId, setSelectedPollId] = useState();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [options, setOptions] = useState([{ text: '', text: '', text: '', text: '' }]);
+  const [options, setOptions] = useState([{ text: ''}, { text: ''}, { text: ''}, { text: '' }]);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function PollForm(props) {
         let options = response.data.options_attributes;
         // Ensure there's at least 4 options
         for (let i = options.length; i < 4; i++) {
-          options[i] = { text: "" };
+          options[i] = { index: i, text: "" };
         };
         setOptions(options);
 
@@ -76,8 +76,8 @@ function PollForm(props) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-12">
-        <div className="border-b border-gray-900/10 pb-12">
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div className="border-b border-gray-900/10">
+          <div className="mt-10 grid grid-cols-12 gap-x-2 gap-y-3 sm:grid-cols-6">
             <div className="col-span-full">
               <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -108,13 +108,11 @@ function PollForm(props) {
             </div>
             <div className="col-span-full">
               <h2 className="text-base my-4 font-semibold leading-7 text-gray-900">Options</h2>
-
-
-              <div className='grid grid-flow-row auto-rows-auto gap-10'>
+              <div className='grid grid-flow-row auto-rows-auto gap-0'>
                 {options.map((option, index) => (
                   <div key={index} className="mt-2 mb-4">
                     <input
-                      className="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded border-0 shadow focus:outline-none focus:ring w-full"
+                      className="w-full placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded border-1 shadow focus:outline-none focus:ring w-full"
                       type="text"
                       id={`option_${index}`}
                       value={option.text}
@@ -127,7 +125,7 @@ function PollForm(props) {
           </div>
         </div>
 
-        <div className='flex mt-5 space-x-1'>
+        <div className='flex'>
           <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">{isEditing ? 'Update Poll' : 'Create Poll'}</button>
           {isEditing && (
             <button className="flex bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onClick={handleDeletePoll}>Delete Poll</button>
