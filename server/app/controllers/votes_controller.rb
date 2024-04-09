@@ -1,4 +1,8 @@
 class VotesController < ApplicationController
+  def index
+    render json: Vote.all
+  end
+
   def show
     render json: {vote: vote}
   end
